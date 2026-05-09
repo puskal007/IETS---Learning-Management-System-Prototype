@@ -48,7 +48,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}.btn-ghost:hover:not(:disabled){background:var(--bg);color:var(--text)}
 .btn-sm{padding:6px 12px;font-size:12px}.btn-lg{padding:12px 24px;font-size:15px}.btn-block{width:100%}
 /* LAYOUT */
-.app{display:flex;min-height:100vh}
+.app{display:flex;min-height:100vh;width:100%;overflow:hidden}
 .sidebar{width:var(--sidebar);background:#0f172a;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:200;overflow:hidden;transition:transform .25s}
 .sb-head{padding:18px 14px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
 .sb-brand{display:flex;align-items:center;gap:10px}
@@ -67,12 +67,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
 .sb-foot{padding:10px 8px;border-top:1px solid rgba(255,255,255,.07)}
 /* MAIN */
-.main{margin-left:var(--sidebar);display:flex;flex-direction:column;min-height:100vh}
+.main{margin-left:var(--sidebar);display:flex;flex-direction:column;min-height:100vh;width:calc(100% - var(--sidebar));overflow:hidden}
 .header{height:60px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
 .header-title{font-size:17px;font-weight:700;letter-spacing:-.3px;flex:1}
-.content{flex:1;padding:24px}
+.content{flex:1}
 /* CARDS */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
 .stat-card{background:#fff;border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px;transition:box-shadow .18s}
 .stat-card:hover{box-shadow:var(--shadow-md)}
 .stat-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
@@ -163,8 +163,70 @@ tr:hover td{background:#fafbfc}
 .grade-C{color:#d97706;font-weight:700}.grade-D{color:#ea580c;font-weight:700}.grade-F{color:var(--red);font-weight:700}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
-  .main{margin-left:0}.content{padding:16px}.stats-grid{grid-template-columns:1fr 1fr}
+  .main{margin-left:0;width:100%}.content{padding:16px}.stats-grid{grid-template-columns:1fr 1fr}
   .form-row{grid-template-columns:1fr}
+}
+
+/* ── RIGHT PANEL & CALENDAR ── */
+.with-calendar{display:flex;gap:0;align-items:flex-start;width:100%;min-height:calc(100vh - 60px)}
+.page-body{flex:1;min-width:0;padding:24px;overflow-y:auto;min-height:calc(100vh - 60px)}
+.right-panel{width:280px;flex-shrink:0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;overflow-x:hidden;background:#fff;border-left:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin}
+.cal-widget{background:#fff;border-radius:var(--radius);border:1px solid var(--border);width:100%;overflow:hidden}
+.cal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;border-bottom:1px solid var(--border)}
+.cal-title{font-size:14px;font-weight:700;letter-spacing:-.3px}
+.cal-nav{width:26px;height:26px;border:none;background:var(--bg);border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s}
+.cal-nav:hover{background:var(--primary-l);color:var(--primary)}
+.cal-grid{padding:6px 8px 10px}
+.cal-days-head{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px}
+.cal-day-lbl{text-align:center;font-size:10px;font-weight:700;color:var(--muted);padding:3px 0;text-transform:uppercase}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;width:100%}
+.cal-day{text-align:center;padding:4px 1px;font-size:11px;border-radius:5px;cursor:pointer;color:var(--text);transition:all .15s;position:relative;min-width:0}
+.cal-day:hover{background:var(--primary-l);color:var(--primary)}
+.cal-day.other-month{color:var(--light)}
+.cal-day.today{background:var(--primary);color:#fff;font-weight:700}
+.cal-day.today:hover{background:var(--primary-d)}
+.cal-day.has-event::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--orange)}
+.cal-day.today.has-event::after{background:#fff}
+.cal-day.selected{background:var(--primary-l);color:var(--primary);font-weight:600}
+.cal-events{border-top:1px solid var(--border);padding:10px 14px}
+.cal-events-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cal-event-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.cal-event-item:last-child{border-bottom:none}
+.cal-event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.cal-event-name{font-size:12px;font-weight:600;color:var(--text)}
+.cal-event-time{font-size:11px;color:var(--muted)}
+.mini-clock{background:linear-gradient(135deg,#1e3a5f,#2563eb);border-radius:var(--radius);padding:14px 10px;color:#fff;text-align:center;width:100%}
+.clock-time{font-size:24px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.clock-date{font-size:11px;opacity:.7;margin-top:3px}
+.upcoming-widget{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.upcoming-head{padding:10px 14px;font-size:12px;font-weight:700;color:var(--text);border-bottom:1px solid var(--border);background:var(--bg)}
+.upcoming-item{padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;min-width:0}
+.upcoming-item:last-child{border-bottom:none}
+.upcoming-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;flex-shrink:0}
+@media(max-width:1200px){.right-panel{display:none}}.main{flex:1}
+
+/* ── RESPONSIVE LAYOUT FIXES ── */
+@media(min-width:1201px){
+  .right-panel{display:flex}
+  .page-body{padding:20px 24px}
+}
+@media(min-width:1400px){
+  .right-panel{width:300px}
+  .page-body{padding:24px}
+}
+@media(max-width:1400px) and (min-width:1201px){
+  .stats-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .right-panel{width:260px}
+}
+@media(max-width:1200px){
+  .with-calendar{flex-direction:column}
+  .page-body{width:100%;padding:16px}
+}
+@media(max-width:768px){
+  .page-body{padding:12px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .grid-2,.grid-3{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -211,12 +273,23 @@ const DEL  = p     => api('DELETE', p);
 function render() { document.getElementById('app').innerHTML = buildApp(); }
 function buildApp() {
   if (!S.user) return buildAuth();
-  return `<div class="app">${buildSidebar()}<div class="main">${buildHeader()}<div class="content" id="pc">${S.loading ? buildLoading() : buildPage()}</div></div></div><div id="modal-root"></div><div class="toast-wrap" id="tw"></div>`;
+  return `<div class="app">${buildSidebar()}<div class="main">${buildHeader()}<div class="with-calendar"><div class="page-body" id="pc">${S.loading ? buildLoading() : buildPage()}</div>${buildRightPanel()}</div></div></div><div id="modal-root"></div><div class="toast-wrap" id="tw"></div>`;
 }
 function buildLoading() { return `<div class="loading"><div class="spinner"></div><div>Loading...</div></div>`; }
 function rp() {
+  // Update page content
   const el = document.getElementById('pc');
   if (el) el.innerHTML = S.loading ? buildLoading() : buildPage();
+  // Update header title
+  const ht = document.getElementById('header-title');
+  if (ht) ht.textContent = PAGE_TITLES[S.page] || 'IEG LMS';
+  // Update sidebar active items
+  document.querySelectorAll('.nav-item[data-page]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === S.page);
+  });
+  // Update right panel
+  const rp_el = document.getElementById('right-panel');
+  if (rp_el) rp_el.innerHTML = buildRightPanelInner();
 }
 
 // ═══════════════════════════════════════════════
@@ -327,7 +400,7 @@ function buildSidebar() {
     <nav class="sb-nav">
       ${nav.map(n=>{
         if (n.sec) return `<div class="nav-section">${n.sec}</div>`;
-        return `<button class="nav-item ${S.page===n.id?'active':''}" onclick="navigate('${n.id}')"><span class="nav-icon">${n.icon}</span><span>${n.label}</span></button>`;
+        return `<button class="nav-item ${S.page===n.id?'active':''}" data-page="${n.id}" onclick="navigate('${n.id}')"><span class="nav-icon">${n.icon}</span><span>${n.label}</span></button>`;
       }).join('')}
     </nav>
     <div class="sb-foot">
@@ -345,7 +418,7 @@ function buildHeader() {
   const roleClass = `role-${role}`;
   return `
   <div class="header">
-    <div class="header-title">${PAGE_TITLES[S.page]||'IEG LMS'}</div>
+    <div class="header-title" id="header-title">${PAGE_TITLES[S.page]||'IEG LMS'}</div>
     <div style="display:flex;align-items:center;gap:10px">
       <span class="badge ${roleClass}" style="font-size:12px;padding:4px 10px">${role==='admin'?'👤 Admin':role==='teacher'?'👩‍🏫 Teacher':'🎓 Student'}</span>
     </div>
@@ -1386,6 +1459,148 @@ function toast(msg, type='info') {
 // ═══════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════
+//  CALENDAR & RIGHT PANEL
+// ═══════════════════════════════════════════════
+const CAL = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth(),
+  selected: null
+};
+
+function calPrev() {
+  CAL.month--;
+  if (CAL.month < 0) { CAL.month = 11; CAL.year--; }
+  const rp = document.getElementById('right-panel');
+  if (rp) rp.innerHTML = buildRightPanelInner();
+}
+function calNext() {
+  CAL.month++;
+  if (CAL.month > 11) { CAL.month = 0; CAL.year++; }
+  const rp = document.getElementById('right-panel');
+  if (rp) rp.innerHTML = buildRightPanelInner();
+}
+function calSelect(day) {
+  CAL.selected = day;
+  const rp = document.getElementById('right-panel');
+  if (rp) rp.innerHTML = buildRightPanelInner();
+}
+
+function getAssignmentEvents() {
+  const events = [];
+  const all = S.data.assignments || S.data.dash?.upcoming_assignments || [];
+  all.forEach(a => {
+    if (a.due_date) {
+      const d = new Date(a.due_date);
+      events.push({ day: d.getDate(), month: d.getMonth(), year: d.getFullYear(), name: a.title, color: '#f97316', type: 'Due' });
+    }
+  });
+  return events;
+}
+
+function buildCalendar() {
+  const now = new Date();
+  const y = CAL.year, m = CAL.month;
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const firstDay = new Date(y, m, 1).getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const daysInPrev = new Date(y, m, 0).getDate();
+  const events = getAssignmentEvents();
+
+  function hasEvent(d) { return events.some(e => e.day===d && e.month===m && e.year===y); }
+
+  let days = '';
+  // Prev month days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    days += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
+  }
+  // Current month days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = d===now.getDate() && m===now.getMonth() && y===now.getFullYear();
+    const isSel = CAL.selected===d;
+    const cls = [isToday?'today':'', isSel&&!isToday?'selected':'', hasEvent(d)?'has-event':''].filter(Boolean).join(' ');
+    days += `<div class="cal-day ${cls}" onclick="calSelect(${d})">${d}</div>`;
+  }
+  // Next month filler
+  const total = firstDay + daysInMonth;
+  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let d = 1; d <= remaining; d++) {
+    days += `<div class="cal-day other-month">${d}</div>`;
+  }
+
+  // Events for selected day or today
+  const showDay = CAL.selected || now.getDate();
+  const dayEvents = events.filter(e => e.day===showDay && e.month===m && e.year===y);
+
+  return `
+  <div class="cal-widget">
+    <div class="cal-head">
+      <button class="cal-nav" onclick="calPrev()">‹</button>
+      <div class="cal-title">${monthNames[m]} ${y}</div>
+      <button class="cal-nav" onclick="calNext()">›</button>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-days-head">${dayNames.map(d=>`<div class="cal-day-lbl">${d}</div>`).join('')}</div>
+      <div class="cal-days">${days}</div>
+    </div>
+    ${dayEvents.length ? `<div class="cal-events">
+      <div class="cal-events-title">📅 ${showDay} ${monthNames[m]}</div>
+      ${dayEvents.map(e=>`<div class="cal-event-item">
+        <div class="cal-event-dot" style="background:${e.color}"></div>
+        <div><div class="cal-event-name">${e.name}</div><div class="cal-event-time">${e.type}</div></div>
+      </div>`).join('')}
+    </div>` : `<div class="cal-events">
+      <div class="cal-events-title">📅 ${showDay} ${monthNames[m]}</div>
+      <div style="font-size:12px;color:var(--muted);padding:4px 0">No events this day</div>
+    </div>`}
+  </div>`;
+}
+
+function buildMiniClock() {
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  const date = now.toLocaleDateString('en-US', { weekday:'long', month:'short', day:'numeric' });
+  return `<div class="mini-clock">
+    <div class="clock-time" id="clock-time">${time}</div>
+    <div class="clock-date">${date}</div>
+  </div>`;
+}
+
+function buildUpcomingWidget() {
+  const all = S.data.assignments || S.data.dash?.upcoming_assignments || [];
+  const now = new Date();
+  const upcoming = all.filter(a => a.due_date && new Date(a.due_date) >= now && !a.is_submitted).slice(0,4);
+  if (!upcoming.length) return '';
+  return `<div class="upcoming-widget">
+    <div class="upcoming-head">⏰ Upcoming Deadlines</div>
+    ${upcoming.map(a => {
+      const days = Math.ceil((new Date(a.due_date) - now) / 86400000);
+      const color = days<=2?'var(--red-l);color:var(--red)':days<=5?'var(--yellow-l);color:var(--yellow)':'var(--green-l);color:var(--green)';
+      return `<div class="upcoming-item">
+        <span class="upcoming-badge" style="background:${color}">${days}d</span>
+        <div style="min-width:0"><div style="font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.title}</div>
+        <div style="font-size:11px;color:var(--muted)">${a.course_code||a.course_name||''}</div></div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function buildRightPanelInner() {
+  return buildMiniClock() + buildCalendar() + buildUpcomingWidget();
+}
+
+function buildRightPanel() {
+  return `<div class="right-panel" id="right-panel">${buildRightPanelInner()}</div>`;
+}
+
+// Clock ticker
+setInterval(() => {
+  const el = document.getElementById('clock-time');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+}, 1000);
+
 async function init() {
   if (S.token) {
     try {

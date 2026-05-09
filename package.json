@@ -11,6 +11,7 @@
     "setup": "node scripts/init-database.js && node scripts/seed-data.js"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^2.1.138",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

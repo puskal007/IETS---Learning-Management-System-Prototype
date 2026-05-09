@@ -1,0 +1,8 @@
+﻿node_modules
+npm-debug.log
+.git
+.gitignore
+*.md
+uploads
+.env
+docker/mysql-init
